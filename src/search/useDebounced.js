@@ -7,8 +7,23 @@
 // changes and whose cleanup cancels the previous timer (clearTimeout).
 //
 // Then use it in CourseSearch:  useCourseSearch(useDebounced(query, 250))
+
 import { useEffect, useState } from "react";
 
 export function useDebounced(value, ms) {
-  throw new Error("TODO");
+  const [settledValue, setSettledValue] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSettledValue(value);
+    }, ms);
+
+    // Cancel the previous timer if value or ms changes
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [value, ms]);
+
+  return settledValue;
 }
+
